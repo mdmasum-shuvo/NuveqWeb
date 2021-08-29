@@ -88,15 +88,18 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                showProgress(true)
-                noInternet.visibility = View.GONE
                 super.onPageStarted(view, url, favicon)
             }
 
             override fun onPageFinished(view: WebView?, url: String?) {
-                isLoaded = true
-                showProgress(false)
                 super.onPageFinished(view, url)
+                isLoaded = true
+                if (!isNetworkAvailable()) {
+                    noInternet.visibility = View.VISIBLE
+                    return
+                }
+                noInternet.visibility = View.GONE
+                showProgress(false)
             }
 
             override fun onReceivedError(
@@ -145,6 +148,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showProgress(visible: Boolean) {
         refresh.isRefreshing = visible
+
     }
 
 
